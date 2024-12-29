@@ -8,9 +8,8 @@
       <Color>0000FF</Color>
       <VariableType>Auto Assembler Script</VariableType>
       <AssemblerScript Async="1">{ Game   : GoWR.exe
-  Version:
-  Date   : 2024-09-23
-  Author : cfemen
+
+  Author : mooofin
 
   This script does blah blah blah
 }
