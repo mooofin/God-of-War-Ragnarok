@@ -1,0 +1,850 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="45">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>87968</ID>
+      <Description>"[Enable #1.2 Steam] "</Description>
+      <Options moHideChildren="1"/>
+      <Color>0000FF</Color>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript Async="1">{ Game   : GoWR.exe
+  Version:
+  Date   : 2024-09-23
+  Author : cfemen
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+//////////
+
+//aobscanmodule(addresource,GoWR.exe,45 33 C0 48 8B CF 41 8D 50 06) // should be unique
+//registersymbol(addresource)
+// GoWR.exe+DFF4D0 Recipe
+// GoWR.exe+E015F0 Equip
+
+aobscanmodule(resources_GetValidResourceId,$process,48 89 5C 24 10 57 48 83 EC 20 48 8B FA C7 02 FF FF FF FF 48 8B D9)
+registersymbol(resources_GetValidResourceId)
+
+aobscanmodule(StdNameHash,$process,33 C0 4C 8B D1 48 89 01 48 85 D2 74 56 44 0F B6 0A 45 84 C9 74 4D 4C 8D 5A 01 66 0F 1F 44 00 00)
+registersymbol(StdNameHash)
+
+aobscanmodule(Wallet_ModifyResource,$process,48 83 EC 38 0F B6 44 24 60 88 44 24 28 4C 89 4C 24 20 41 B1 01)
+registersymbol(Wallet_ModifyResource)
+
+aobscanmodule(progression_skill_tree__GetSkillTree,$process,48 83 EC 38 48 85 C9 75 17)
+registersymbol(progression_skill_tree__GetSkillTree)
+
+aobscanmodule(resources_FindWallet,$process,44 8B 0D ?? ?? ?? ?? 33 D2 45 85 C9 7E 1A)
+registersymbol(resources_FindWallet)
+
+// sound::wwise::Server::UpdateRTPCs
+aobscanmodule(aobGetPlayer,$process,48 8B 05 ?? ?? ?? ?? 48 85 C0 0F 84 62 03 00 00 48 8B 78 08)
+registersymbol(aobGetPlayer)
+
+label(goPlayer__sm_pPlayer)
+registersymbol(goPlayer__sm_pPlayer)
+
+aobGetPlayer+7+(DWORD)[aobGetPlayer+3]:
+goPlayer__sm_pPlayer:
+
+aobscanmodule(aobGetTop,GoWR.exe,48 8B 41 20 48 8B 51 10) // should be unique
+alloc(newmem,$1000,aobGetTop)
+
+label(code)
+label(return)
+label(bCall)
+registersymbol(bCall)
+label(iQty)
+registersymbol(iQty)
+label(fDamageMul)
+registersymbol(fDamageMul)
+label(iResourceID)
+registersymbol(iResourceID)
+label(WalletHash)
+registersymbol(WalletHash)
+label(ResourceHash)
+registersymbol(ResourceHash)
+newmem:
+
+code:
+ cmp byte ptr[bCall],0
+  je Skip
+  mov byte ptr[bCall],0
+   push rcx
+   push rdx
+   push rbx
+   sub rsp,80
+   mov rcx,[WalletHash]
+   call resources_FindWallet
+   test rax,rax
+   je _Null
+   mov rbx,rax
+   lea rdx,[rsp+20]
+   mov rcx,[ResourceHash]
+   call resources_GetValidResourceId
+   test al,al
+   je _Null
+   mov rdx,[rsp+20]
+   mov rcx,rbx
+   //mov rdx,[iResourceID]
+   mov r8,[iQty]
+   mov r9,pTele
+   mov [rsp+20],0
+   call Wallet_ModifyResource
+ _Null:
+   add rsp,80
+   pop rbx
+   pop rdx
+   pop rcx
+  Skip:
+  mov rax,[rcx+20]
+  mov rdx,[rcx+10]
+  jmp return
+align 10 00
+szTele:
+db 'NO_TELEMETRY'
+db 0
+WalletHash:
+dq 00004895C643225F // "HERO"
+ResourceHash:
+dq 9C7CF61C839B9A8A // Kratos XP "EconomyXP"
+iResourceID:
+dd 0 // Default: Kratos XP
+fDamageMul:
+dd (float)2
+iQty:
+dd #10
+bCall:
+db 0
+pTele:
+dq 0
+dq szTele
+
+aobGetTop:
+  jmp newmem
+  nop 3
+return:
+registersymbol(aobGetTop)
+
+[DISABLE]
+
+aobGetTop:
+  db 48 8B 41 20 48 8B 51 10
+
+unregistersymbol(*)
+dealloc(newmem)
+
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>87969</ID>
+          <Description>"God"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : GoWR.exe
+  Version: 
+  Date   : 2024-09-20
+  Author : cfemen
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+
+aobscanmodule(goCreature__IsInvulnerable,GoWR.exe,40 53 48 83 EC 20 48 8B D9 BA 00 00) // should be unique
+alloc(newmem,$1000,goCreature__IsInvulnerable)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+mov rax,goPlayer__sm_pPlayer
+mov rax,[rax]
+mov rax,[rax+8]
+cmp rax,rcx
+jne short @f
+ mov al,1
+ ret
+@@:
+  push rbx
+  sub rsp,20
+  jmp return
+
+goCreature__IsInvulnerable:
+  jmp newmem
+  nop
+return:
+registersymbol(goCreature__IsInvulnerable)
+
+[DISABLE]
+
+goCreature__IsInvulnerable:
+  db 40 53 48 83 EC 20
+
+unregistersymbol(goCreature__IsInvulnerable)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: GoWR.exe+9E82D0
+
+GoWR.exe+9E82C6: CC                    - int 3 
+GoWR.exe+9E82C7: CC                    - int 3 
+GoWR.exe+9E82C8: CC                    - int 3 
+GoWR.exe+9E82C9: CC                    - int 3 
+GoWR.exe+9E82CA: CC                    - int 3 
+GoWR.exe+9E82CB: CC                    - int 3 
+GoWR.exe+9E82CC: CC                    - int 3 
+GoWR.exe+9E82CD: CC                    - int 3 
+GoWR.exe+9E82CE: CC                    - int 3 
+GoWR.exe+9E82CF: CC                    - int 3 
+// ---------- INJECTING HERE ----------
+GoWR.exe+9E82D0: 40 53                 - push rbx
+// ---------- DONE INJECTING  ----------
+GoWR.exe+9E82D2: 48 83 EC 20           - sub rsp,20
+GoWR.exe+9E82D6: 48 8B D9              - mov rbx,rcx
+GoWR.exe+9E82D9: BA 00 00 01 00        - mov edx,00010000
+GoWR.exe+9E82DE: 48 8B 89 10 65 00 00  - mov rcx,[rcx+00006510]
+GoWR.exe+9E82E5: E8 16 D1 00 00        - call GoWR.exe+9F5400
+GoWR.exe+9E82EA: 48 85 C0              - test rax,rax
+GoWR.exe+9E82ED: 75 2D                 - jne GoWR.exe+9E831C
+GoWR.exe+9E82EF: 48 8B 8B 10 65 00 00  - mov rcx,[rbx+00006510]
+GoWR.exe+9E82F6: BA 00 01 00 00        - mov edx,00000100
+GoWR.exe+9E82FB: E8 00 D1 00 00        - call GoWR.exe+9F5400
+}
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>87970</ID>
+          <Description>"No Damage"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : GoWR.exe
+  Version: 
+  Date   : 2024-09-21
+  Author : cfemen
+
+  This script does blah blah blah
+}
+
+define(address,[[[goPlayer__sm_pPlayer]]+58])
+
+[ENABLE]
+
+address:
+  db B0 01 C3
+
+[DISABLE]
+
+address:
+  db 0F B6 05
+
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>87971</ID>
+          <Description>"Inf Rage"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : GoWR.exe
+  Version: 
+  Date   : 2024-09-21
+  Author : cfemen
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(aobSRCMeterAdjust_Run,GoWR.exe,C6 44 24 20 01 45 33 C0 49 8B)
+alloc(newmem,$1000,aobSRCMeterAdjust_Run)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+mov rax,goPlayer__sm_pPlayer
+mov rax,[rax]
+test rax,rax
+je Skip
+  mov rax,[rax+8]
+  cmp rax,[r14+10]
+  jne Skip
+   mov rax,10DBF22D67C1449
+   cmp rax,[r14+20]
+   jne Skip
+     mov eax,#100
+     cvtsi2ss xmm6,eax
+Skip:
+  mov byte ptr [rsp+20],01
+  jmp return
+
+aobSRCMeterAdjust_Run:
+  jmp newmem
+return:
+registersymbol(aobSRCMeterAdjust_Run)
+
+[DISABLE]
+
+aobSRCMeterAdjust_Run:
+  db C6 44 24 20 01
+
+unregistersymbol(aobSRCMeterAdjust_Run)
+dealloc(newmem)
+
+{
+GoWR.exe+CE9FC5 - F3 41 0F58 76 28      - addss xmm6,[r14+28]
+GoWR.exe+CE9FCB - 45 33 C9              - xor r9d,r9d
+GoWR.exe+CE9FCE - C6 44 24 20 01        - mov byte ptr [rsp+20],01 &lt;------
+GoWR.exe+CE9FD3 - 45 33 C0              - xor r8d,r8d
+GoWR.exe+CE9FD6 - 49 8B CE              - mov rcx,r14
+GoWR.exe+CE9FD9 - 0F28 CE               - movaps xmm1,xmm6
+GoWR.exe+CE9FDC - E8 2F15E5FF           - call aobmeter_Base_Set
+GoWR.exe+CE9FE1 - 48 8B 7C 24 30        - mov rdi,[rsp+30]
+GoWR.exe+CE9FE6 - 0F28 BC 24 70010000   - movaps xmm7,[rsp+00000170]
+GoWR.exe+CE9FEE - 41 80 7F 64 00        - cmp byte ptr [r15+64],00
+GoWR.exe+CE9FF3 - 0F28 B4 24 80010000   - movaps xmm6,[rsp+00000180]
+}
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>87972</ID>
+          <Description>"Always Stun"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : GoWR.exe
+  Version: 
+  Date   : 2024-09-21
+  Author : cfemen
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(aobmeter_Base_Set,GoWR.exe,48 89 5C 24 18 55 48 83 EC 70) // should be unique
+alloc(newmem,$1000,aobmeter_Base_Set)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+ mov rax,656D1AF9232CA78B
+  cmp rax,[rcx+20]
+  jne short @f
+   mov [rcx+28],(float)100
+   movss xmm1,[rcx+28]
+  @@:
+  mov [rsp+18],rbx
+  jmp return
+
+aobmeter_Base_Set:
+  jmp newmem
+return:
+registersymbol(aobmeter_Base_Set)
+
+[DISABLE]
+
+aobmeter_Base_Set:
+  db 48 89 5C 24 18
+
+unregistersymbol(aobmeter_Base_Set)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: GoWR.exe+B3B510
+
+GoWR.exe+B3B506: CC                 - int 3 
+GoWR.exe+B3B507: CC                 - int 3 
+GoWR.exe+B3B508: CC                 - int 3 
+GoWR.exe+B3B509: CC                 - int 3 
+GoWR.exe+B3B50A: CC                 - int 3 
+GoWR.exe+B3B50B: CC                 - int 3 
+GoWR.exe+B3B50C: CC                 - int 3 
+GoWR.exe+B3B50D: CC                 - int 3 
+GoWR.exe+B3B50E: CC                 - int 3 
+GoWR.exe+B3B50F: CC                 - int 3 
+// ---------- INJECTING HERE ----------
+GoWR.exe+B3B510: 48 89 5C 24 18     - mov [rsp+18],rbx
+// ---------- DONE INJECTING  ----------
+GoWR.exe+B3B515: 55                 - push rbp
+GoWR.exe+B3B516: 48 83 EC 70        - sub rsp,70
+GoWR.exe+B3B51A: 48 83 79 18 00     - cmp qword ptr [rcx+18],00
+GoWR.exe+B3B51F: 49 8B E8           - mov rbp,r8
+GoWR.exe+B3B522: 0F 29 74 24 60     - movaps [rsp+60],xmm6
+GoWR.exe+B3B527: 48 8B D9           - mov rbx,rcx
+GoWR.exe+B3B52A: 0F 28 F1           - movaps xmm6,xmm1
+GoWR.exe+B3B52D: 0F 84 A0 01 00 00  - je GoWR.exe+B3B6D3
+GoWR.exe+B3B533: 80 79 61 00        - cmp byte ptr [rcx+61],00
+GoWR.exe+B3B537: 0F 85 96 01 00 00  - jne GoWR.exe+B3B6D3
+}
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>87973</ID>
+          <Description>"Inf. Arrows"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : GoWR.exe
+  Version: 
+  Date   : 2024-09-21
+  Author : cfemen
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+
+aobscanmodule(aobWriteBaseSetNoThresholdCheck,GoWR.exe,F3 0F 11 7E 28) // should be unique
+alloc(newmem,$1000,aobWriteBaseSetNoThresholdCheck)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+push rax
+mov rax,E9E724EC96F7D8B4
+cmp rax,[rsi+20]
+pop rax
+je return
+  movss [rsi+28],xmm7
+  jmp return
+
+aobWriteBaseSetNoThresholdCheck:
+  jmp newmem
+return:
+registersymbol(aobWriteBaseSetNoThresholdCheck)
+
+[DISABLE]
+
+aobWriteBaseSetNoThresholdCheck:
+  db F3 0F 11 7E 28
+
+unregistersymbol(aobWriteBaseSetNoThresholdCheck)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: GoWR.exe+B3B9C3
+
+GoWR.exe+B3B997: 41 0F 28 F8              - movaps xmm7,xmm8
+GoWR.exe+B3B99B: F3 0F 5F F8              - maxss xmm7,xmm0
+GoWR.exe+B3B99F: F3 0F 10 86 94 00 00 00  - movss xmm0,[rsi+00000094]
+GoWR.exe+B3B9A7: 0F 2F C6                 - comiss xmm0,xmm6
+GoWR.exe+B3B9AA: F3 0F 5D F9              - minss xmm7,xmm1
+GoWR.exe+B3B9AE: 76 07                    - jna GoWR.exe+B3B9B7
+GoWR.exe+B3B9B0: F3 0F 5D C7              - minss xmm0,xmm7
+GoWR.exe+B3B9B4: 0F 28 F8                 - movaps xmm7,xmm0
+GoWR.exe+B3B9B7: 41 0F 2E F9              - ucomiss xmm7,xmm9
+GoWR.exe+B3B9BB: 48 89 9C 24 88 00 00 00  - mov [rsp+00000088],rbx
+// ---------- INJECTING HERE ----------
+GoWR.exe+B3B9C3: F3 0F 11 7E 28           - movss [rsi+28],xmm7
+// ---------- DONE INJECTING  ----------
+GoWR.exe+B3B9C8: 0F 8A BD 00 00 00        - jp GoWR.exe+B3BA8B
+GoWR.exe+B3B9CE: 0F 85 B7 00 00 00        - jne GoWR.exe+B3BA8B
+GoWR.exe+B3B9D4: 45 0F 2E C1              - ucomiss xmm8,xmm9
+GoWR.exe+B3B9D8: 48 8B C2                 - mov rax,rdx
+GoWR.exe+B3B9DB: 7A 06                    - jp GoWR.exe+B3B9E3
+GoWR.exe+B3B9DD: 0F 84 4D 01 00 00        - je GoWR.exe+B3BB30
+GoWR.exe+B3B9E3: 48 85 D2                 - test rdx,rdx
+GoWR.exe+B3B9E6: 0F 84 44 01 00 00        - je GoWR.exe+B3BB30
+GoWR.exe+B3B9EC: 48 8B 82 88 00 00 00     - mov rax,[rdx+00000088]
+GoWR.exe+B3B9F3: 48 85 C0                 - test rax,rax
+}
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>87974</ID>
+          <Description>"Damage Multiplier x?"</Description>
+          <Options moHideChildren="1"/>
+          <Color>FF8000</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : GoWR.exe
+  Version: 
+  Date   : 2024-09-20
+  Author : cfemen
+
+  This script does blah blah blah
+}
+
+define(address,[[[goPlayer__sm_pPlayer]]+38])
+define(bytes,48 89 5C 24 08)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,[[[goPlayer__sm_pPlayer]]+38])
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+mov rax,fDamageMul
+movss xmm0,[rax]
+ret
+  mov [rsp+08],rbx
+  jmp return
+
+address:
+  jmp newmem
+return:
+
+[DISABLE]
+
+address:
+  db bytes
+  // mov [rsp+08],rbx
+
+dealloc(newmem)
+
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>87975</ID>
+              <Description>"x?"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Float</VariableType>
+              <Address>fDamageMul</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>87977</ID>
+          <Description>"Give Resource By Hash"</Description>
+          <Color>808000</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+WalletHash:
+dq 4895C643225F
+
+bCall:
+db 1
+ 
+[DISABLE]
+
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>87978</ID>
+              <Description>"Hash:"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>8 Bytes</VariableType>
+              <Address>ResourceHash</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>87979</ID>
+              <Description>"Amount:"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>iQty</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>87980</ID>
+          <Description>"Give Resource By Hash ( Valhalla DLC )"</Description>
+          <Color>808000</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+WalletHash:
+dq c328a4304a7640fa
+
+bCall:
+db 1
+ 
+[DISABLE]
+
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>87981</ID>
+              <Description>"Hash:"</Description>
+              <ShowAsHex>1</ShowAsHex>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>8 Bytes</VariableType>
+              <Address>ResourceHash</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>87982</ID>
+              <Description>"Amount:"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>iQty</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>87983</ID>
+          <Description>"Give Fleeting Echos ( Valhalla DLC )"</Description>
+          <Color>808000</Color>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+ResourceHash:
+dq 9379BDDEDD02D427
+
+WalletHash:
+dq DFFD620036BAB2CC
+
+bCall:
+db 1
+ 
+[DISABLE]
+
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>87984</ID>
+              <Description>"Amount:"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>iQty</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>87985</ID>
+          <Description>"Axe Unlock/Lock Skills"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{$lua}
+if syntaxcheck then return end
+[ENABLE]
+
+local Axe = 0x1013865FC6
+local GetSkillTree = getAddress("progression_skill_tree__GetSkillTree")
+
+local SkillTree = executeCodeEx(0,nil,GetSkillTree,Axe)
+local t = readPointer(SkillTree)
+local Num = readInteger(t+8)
+local Skills = readPointer(SkillTree+0x8)
+
+local NameList = createStringList()
+local SkillsTable = {}
+
+Skills=Skills+0xC
+for i=0,Num-1 do
+ local Data = readPointer(Skills-0xC)
+ Data = readPointer(Data+0x40)
+ local Name = readString(Data,128,false)
+ NameList.add(Name)
+ SkillsTable[Name] = Skills
+ local Flags = readSmallInteger(Skills)
+ Skills=Skills+0x18
+end
+
+local nameIndex = showSelectionList("Select The Skill:", "Select:", NameList, false)
+if nameIndex == -1 then
+    error("no selection")
+    return
+end
+
+local Name = NameList[nameIndex]
+
+local p = SkillsTable[Name]
+
+local ret = messageDialog("Press Yes For Unlock And No For Lock",2,0,1)
+
+local flags = readSmallInteger(p)
+flags = flags | 0x101
+if ret == 7 then flags = flags &amp; ~0x101 end
+writeSmallInteger(p,flags)
+
+[DISABLE]
+
+
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>87986</ID>
+          <Description>"Blade Unlock/Lock Skills"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{$lua}
+if syntaxcheck then return end
+[ENABLE]
+local Blade = 0x38EA4A0828266819
+local GetSkillTree = getAddress("progression_skill_tree__GetSkillTree")
+
+local SkillTree = executeCodeEx(0,nil,GetSkillTree,Blade)
+local t = readPointer(SkillTree)
+local Num = readInteger(t+8)
+local Skills = readPointer(SkillTree+0x8)
+
+local NameList = createStringList()
+local SkillsTable = {}
+
+Skills=Skills+0xC
+for i=0,Num-1 do
+ local Data = readPointer(Skills-0xC)
+ Data = readPointer(Data+0x40)
+ local Name = readString(Data,128,false)
+ NameList.add(Name)
+ SkillsTable[Name] = Skills
+ local Flags = readSmallInteger(Skills)
+ Skills=Skills+0x18
+end
+
+local nameIndex = showSelectionList("Select The Skill:", "Select:", NameList, false)
+if nameIndex == -1 then
+    error("no selection")
+    return
+end
+
+local Name = NameList[nameIndex]
+
+local p = SkillsTable[Name]
+
+local ret = messageDialog("Press Yes For Unlock And No For Lock",2,0,1)
+
+local flags = readSmallInteger(p)
+flags = flags | 0x101
+if ret == 7 then flags = flags &amp; ~0x101 end
+writeSmallInteger(p,flags)
+
+[DISABLE]
+
+
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>87987</ID>
+          <Description>"Spear Unlock/Lock Skills"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{$lua}
+if syntaxcheck then return end
+[ENABLE]
+local Spear = 0x14BAA9043ACBB11
+local GetSkillTree = getAddress("progression_skill_tree__GetSkillTree")
+
+local SkillTree = executeCodeEx(0,nil,GetSkillTree,Spear)
+local t = readPointer(SkillTree)
+local Num = readInteger(t+8)
+local Skills = readPointer(SkillTree+0x8)
+
+local NameList = createStringList()
+local SkillsTable = {}
+
+Skills=Skills+0xC
+for i=0,Num-1 do
+ local Data = readPointer(Skills-0xC)
+ Data = readPointer(Data+0x40)
+ local Name = readString(Data,128,false)
+ NameList.add(Name)
+ SkillsTable[Name] = Skills
+ local Flags = readSmallInteger(Skills)
+ Skills=Skills+0x18
+end
+
+local nameIndex = showSelectionList("Select The Skill:", "Select:", NameList, false)
+if nameIndex == -1 then
+    error("no selection")
+    return
+end
+
+local Name = NameList[nameIndex]
+
+local p = SkillsTable[Name]
+
+local ret = messageDialog("Press Yes For Unlock And No For Lock",2,0,1)
+
+local flags = readSmallInteger(p)
+flags = flags | 0x101
+if ret == 7 then flags = flags &amp; ~0x101 end
+writeSmallInteger(p,flags)
+
+[DISABLE]
+
+
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>87988</ID>
+          <Description>"Atreus Unlock/Lock Skills"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{$lua}
+if syntaxcheck then return end
+[ENABLE]
+local Atreus = 0x7A134D7DF345D66
+local GetSkillTree = getAddress("progression_skill_tree__GetSkillTree")
+
+local SkillTree = executeCodeEx(0,nil,GetSkillTree,Atreus)
+local t = readPointer(SkillTree)
+local Num = readInteger(t+8)
+local Skills = readPointer(SkillTree+0x8)
+
+local NameList = createStringList()
+local SkillsTable = {}
+
+Skills=Skills+0xC
+for i=0,Num-1 do
+ local Data = readPointer(Skills-0xC)
+ Data = readPointer(Data+0x40)
+ local Name = readString(Data,128,false)
+ NameList.add(Name)
+ SkillsTable[Name] = Skills
+ local Flags = readSmallInteger(Skills)
+ Skills=Skills+0x18
+end
+
+local nameIndex = showSelectionList("Select The Skill:", "Select:", NameList, false)
+if nameIndex == -1 then
+    error("no selection")
+    return
+end
+
+local Name = NameList[nameIndex]
+
+local p = SkillsTable[Name]
+
+local ret = messageDialog("Press Yes For Unlock And No For Lock",2,0,1)
+
+local flags = readSmallInteger(p)
+flags = flags | 0x101
+if ret == 7 then flags = flags &amp; ~0x101 end
+writeSmallInteger(p,flags)
+
+[DISABLE]
+
+
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>87989</ID>
+          <Description>"Inf. Puzzle Timer"</Description>
+          <Options moHideChildren="1"/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+aobscanmodule(aobReadDTChunk,GoWR.exe,F3 0F 10 0D ?? ?? ?? ?? 48 8D 8B 78 B8 01 00) // should be unique
+
+aobReadDTChunk:
+  db 0F 57 C9 90 90 90 90 90
+
+registersymbol(aobReadDTChunk)
+
+[DISABLE]
+
+aobReadDTChunk:
+  db F3 0F 10 0D A1 32 1E 03
+
+unregistersymbol(aobReadDTChunk)
+
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>87990</ID>
+              <Description>"!DISABLE THIS SCRIPT IF NOT NEEDED!"</Description>
+              <Color>0000FF</Color>
+              <GroupHeader>1</GroupHeader>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+</CheatTable>
