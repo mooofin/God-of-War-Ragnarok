@@ -143,7 +143,7 @@ dealloc(newmem)
           <AssemblerScript>{ Game   : GoWR.exe
   Version: 
   Date   : 2024-09-20
-  Author : cfemen
+  Author : mooofin
 
   This script does blah blah blah
 }
@@ -222,7 +222,7 @@ GoWR.exe+9E82FB: E8 00 D1 00 00        - call GoWR.exe+9F5400
           <AssemblerScript>{ Game   : GoWR.exe
   Version: 
   Date   : 2024-09-21
-  Author : cfemen
+  Author : mooofin
 
   This script does blah blah blah
 }
@@ -248,7 +248,7 @@ address:
           <AssemblerScript>{ Game   : GoWR.exe
   Version: 
   Date   : 2024-09-21
-  Author : cfemen
+  Author : mooofin
 
   This script does blah blah blah
 }
@@ -315,7 +315,7 @@ GoWR.exe+CE9FF3 - 0F28 B4 24 80010000   - movaps xmm6,[rsp+00000180]
           <AssemblerScript>{ Game   : GoWR.exe
   Version: 
   Date   : 2024-09-21
-  Author : cfemen
+  Author : mooofin
 
   This script does blah blah blah
 }
@@ -389,7 +389,7 @@ GoWR.exe+B3B537: 0F 85 96 01 00 00  - jne GoWR.exe+B3B6D3
           <AssemblerScript>{ Game   : GoWR.exe
   Version: 
   Date   : 2024-09-21
-  Author : cfemen
+  Author : mooofin
 
   This script does blah blah blah
 }
@@ -464,7 +464,7 @@ GoWR.exe+B3B9F3: 48 85 C0                 - test rax,rax
           <AssemblerScript>{ Game   : GoWR.exe
   Version: 
   Date   : 2024-09-20
-  Author : cfemen
+  Author : mooofin
 
   This script does blah blah blah
 }
