@@ -1,57 +1,56 @@
-God of War: Ragnarok Cheat Table & VRAM Bypass
-This guide provides instructions on how to use the cheat table and enable the VRAM bypass for God of War: Ragnarok. These tools allow you to modify in-game values and bypass VRAM restrictions for smoother gameplay.
+🎮 God of War: Ragnarok Cheat Table & VRAM Bypass Guide
+Ready to unlock God of War: Ragnarok's full potential? This guide shows you how to wield the power of Cheat Engine and bypass those pesky VRAM limits. Whether you're looking for infinite hacks or smoother gameplay, we’ve got you covered! 💪⚡
 
-Requirements
-Cheat Engine
+What You'll Need
+Before we start flexing those Odin-like powers, make sure you’ve got:
 
-Download and install Cheat Engine.
-Cheat Table
+Cheat Engine 🛠️
 
-Download the cheat table from this repository or a trusted source.
-Game Settings
+Download from Cheat Engine. It’s your magic hammer for hacking memory.
+Cheat Table 📜
 
-Ensure the game is running in Windowed or Borderless Window mode for easier debugging.
-Admin Privileges
+Grab the cheat table from this repo (or a reliable source).
+Admin Mode Activated 🔐
 
-Run both Cheat Engine and the game with administrative privileges.
-Steps to Use the Cheat Table
-Launch the Game
+Run Cheat Engine and the game as Administrator because gods need authority too.
+Game in Windowed/Borderless Mode 🖥️
 
-Start God of War: Ragnarok and load your save.
-Attach Cheat Engine
+Makes it easier to see what you’re messing with.
+Unleashing the Cheat Table
+It’s time to unlock god mode! Follow these steps to rule Midgard:
 
-Open Cheat Engine.
-Click the Process List icon (computer icon in the top-left).
-Select the game process (e.g., GOWR.exe) from the list and click Open.
-Load the Cheat Table
+Boot Up the Game 🚀
 
-Click File > Load, then open the downloaded cheat table file (.CT).
-Activate Scripts and Cheats
+Fire up God of War: Ragnarok and load your save.
+Summon Cheat Engine 🧙‍♂️
 
-Expand the cheat table entries in Cheat Engine.
-Enable desired cheats by checking the corresponding boxes (e.g., Infinite Health, Unlimited Resources).
-Enabling VRAM Bypass
-The VRAM bypass removes restrictions that prevent the game from running on GPUs with insufficient memory. Follow these steps:
+Open Cheat Engine and click the glowing computer icon (Process List).
+Find GOWR.exe and hit Open.
+Load the Cheat Table 📂
 
-Locate the VRAM Bypass Script
+In Cheat Engine, go to File > Load and choose your .CT file.
+Activate Your Powers 🔥
 
-In the cheat table, find the entry labeled VRAM Bypass or similar.
-Activate the Script
+Look for fun hacks like Infinite Health, Unlimited Rage, or Max Resources.
+Click the checkboxes to unleash them.
+The Mighty VRAM Bypass
+Is your GPU crying under the weight of the Nine Realms? Let’s silence the whining with the VRAM bypass:
 
-Check the box next to VRAM Bypass. This modifies the game’s memory to override VRAM checks.
-Verify Changes
+Locate the VRAM Bypass Script 🛡️
 
-Restart the game if required and ensure that VRAM-related issues are resolved.
-Troubleshooting
-Cheat Engine Fails to Attach:
-Ensure you’re running both Cheat Engine and the game with administrative privileges.
+In the cheat table, find the VRAM Bypass option (look for something epic-sounding).
+Flip the Switch ⚡
+
+Check the box, and just like that, your game no longer cares about VRAM limits. Who needs restrictions anyway?
+Test Your Divine Intervention ✅
+
+Restart the game if needed and watch it run like a dream. You’re now free to conquer in style.
+Troubleshooting the Trickery
+Cheat Engine Can’t Attach:
+Double-check you’re in admin mode. The gods frown upon weak privileges.
 
 Game Crashes:
-Only activate cheats that are compatible with your version of the game.
+Some scripts might be misaligned with your game version. Only activate what you need.
 
 VRAM Bypass Not Working:
-Confirm that the script is properly enabled and matches your game version.
-
-Disclaimer
-Using cheats may affect your gaming experience and could potentially lead to crashes or bugs.
-Always use mods and cheats responsibly and only in single-player modes to avoid violating game policies.
+Ensure the bypass script matches your game version. If all else fails, rage like Kratos and reload!
