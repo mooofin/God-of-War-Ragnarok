@@ -1,5 +1,5 @@
 🎮 God of War: Ragnarok Cheat Table & VRAM Bypass Guide
-Ready to unlock God of War: Ragnarok's full potential? This guide shows you how to wield the power of Cheat Engine and bypass those pesky VRAM limits. Whether you're looking for infinite hacks or smoother gameplay, we’ve got you covered! 💪⚡
+Ready to unlock God of War: Ragnarok's full potential? This guide shows you how to wield the power of Cheat Engine and bypass those pesky VRAM limits. Whether you're looking for infinite hacks or smoother gameplay, i’ve got you covered! 💪⚡
 
 What You'll Need
 Before we start flexing those Odin-like powers, make sure you’ve got:
