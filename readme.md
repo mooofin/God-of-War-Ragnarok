@@ -10,4 +10,4 @@
    - Guide Cheat Engine to the correct folder.
    - Select the table (usually named `processname.ct`).
 7. Once the table is loaded, if there is a script, **check it**.
-8. **ALT+TAB back to the game** and have fun!
+
