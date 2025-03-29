@@ -48,6 +48,7 @@ Cheat Engine (CE) is an advanced memory scanning, disassembly, and debugging too
   - If necessary, apply a freeze (`Lock`) to prevent value restoration via game logic.
 
 ## Use Cases & Advanced Examples
+
 ### Example 1: Enabling God Mode via ASM Injection
 1. Attach Cheat Engine to the process.
 2. Load the Cheat Table.
@@ -64,13 +65,61 @@ Cheat Engine (CE) is an advanced memory scanning, disassembly, and debugging too
 6. Modify the value manually or apply a pointer scan to locate the base pointer.
 7. (Advanced) Inject an inline `NOP` operation to suppress decrementing behavior.
 
-### Example 3: Debugging with Breakpoints and Memory Inspection
-1. Attach CE to the target process.
-2. Identify a critical memory address (e.g., enemy AI logic controlling hit detection).
-3. Right-click the address and set a **Breakpoint**.
-4. Trigger the relevant in-game event (e.g., taking damage) to invoke the breakpoint.
-5. Analyze the stack, registers, and assembly instructions at runtime.
-6. Modify relevant opcodes (e.g., replacing `DEC EAX` with `NOP`) to alter behavior persistently.
+### Example 3: Unlimited Ammo
+1. Identify the memory address that stores the ammo count.
+2. Fire a shot and scan for the updated value.
+3. Continue refining scans until you isolate the correct memory address.
+4. Lock the value or inject an ASM script to set it permanently high.
+
+### Example 4: Speed Manipulation
+1. Find the memory variable associated with movement speed.
+2. Modify it to increase or decrease player velocity dynamically.
+3. Lock the value to maintain persistent effects.
+
+### Example 5: Jump Height Adjustment
+1. Locate the jump height memory address.
+2. Modify the value to allow for higher jumps.
+3. Inject a script that applies a multiplier for dynamic height control.
+
+### Example 6: No Recoil/Spread
+1. Identify the recoil control memory region.
+2. Apply a `NOP` operation to disable spread and recoil mechanics.
+
+### Example 7: Enemy AI Freezing
+1. Locate the memory value controlling enemy movement.
+2. Modify it to prevent AI from executing movement logic.
+
+### Example 8: Unlimited Skill Points
+1. Scan for the current skill points value.
+2. Modify and lock it to prevent depletion.
+
+### Example 9: One-Hit Kills
+1. Locate the enemy health memory region.
+2. Modify the value to 1 or inject an ASM script to apply a massive damage multiplier.
+
+### Example 10: Infinite Stamina
+1. Scan for the current stamina value.
+2. Modify and freeze it to prevent depletion.
+
+### Example 11: Unlocking Paid DLC Content
+1. Identify flags corresponding to DLC activation.
+2. Modify them to enable locked features.
+
+### Example 12: Map Clipping / No Collision
+1. Locate and modify the player collision flag.
+2. Set it to 0 or `NOP` collision checks.
+
+### Example 13: Time Manipulation
+1. Locate the in-game time variable.
+2. Modify it to freeze or accelerate time flow.
+
+### Example 14: XP Multiplier
+1. Identify XP gain addresses.
+2. Modify the gain amount before it is applied.
+
+### Example 15: Unlocking Developer Console
+1. Locate debug flag in memory.
+2. Modify the value to enable hidden debugging tools.
 
 ## Debugging & Troubleshooting
 - **Process Not Detectable:** Ensure the game is running with `Run as Administrator`. If the game employs anti-debugging mechanisms, use CE’s **Stealth Mode**.
@@ -84,14 +133,10 @@ Cheat Engine (CE) is an advanced memory scanning, disassembly, and debugging too
 - **Memory Integrity Checks:** Some modern titles use signature-based validation to detect modified instructions; apply script obfuscation or bypass mechanisms where applicable.
 - **Avoid Permanent Data Corruption:** Always maintain backups of save files prior to executing memory modifications.
 
-
-
 ### Further Reading & Resources
-- [Cheat Engine Official Documentation](https://www.cheatengine.org/)  
-- [Fearless Revolution - Cheat Table Repository](https://fearlessrevolution.com/)  
-- [x64dbg – Advanced Debugging Alternative](https://x64dbg.com/)  
-- [WinDbg – Windows Debugging Toolkit](https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/)  
+- [Cheat Engine Official Documentation](https://www.cheatengine.org/)
+- [Fearless Revolution - Cheat Table Repository](https://fearlessrevolution.com/)
+- [x64dbg – Advanced Debugging Alternative](https://x64dbg.com/)
+- [WinDbg – Windows Debugging Toolkit](https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/)
 - [ReClass.NET – Memory Structure Analysis](https://github.com/ReClassNET/ReClass.NET)
-
-
 
