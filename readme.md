@@ -1,142 +1,180 @@
-# Cheat Engine Cheat Table Usage Guide
 
-## Introduction
-Cheat Engine (CE) is an advanced memory scanning, disassembly, and debugging tool that facilitates runtime memory modification through manual manipulation or automated Cheat Tables (`.ct` files). These structured scripts leverage pointer resolution, assembly injection, and real-time value overwriting to achieve deterministic or heuristic-based memory alterations. This guide provides a highly technical overview of the optimal workflow for harnessing Cheat Tables to manipulate volatile memory states efficiently.
 
-## Prerequisites
-- **Cheat Engine** (latest stable build, or a custom-compiled version for maximum control)
-- **Target Process** (i.e., a running instance of the game binary within memory)
-- **Cheat Table (`.ct` file)** tailored for the game's version, architecture (x86/x64), and memory layout
-- **Knowledge of Assembly (optional but recommended for ASM script modifications)**
+---
 
-## Workflow: Utilizing a Cheat Table in Cheat Engine
+## **1. Introduction**  
+Cheat Engine (CE) is a **low-level memory analysis and manipulation framework** designed for **runtime process introspection, dynamic memory patching, and automated game state control** via structured Cheat Tables (`.ct`). This document serves as an **exhaustive technical reference** for **professional-grade memory hacking**, covering **pointer resolution strategies, assembly injection, anti-debug evasion, and heuristic-based memory modification**.  
 
-### 1. Acquire the Cheat Table
-- Download or create a `.ct` file that corresponds with the game’s memory structure.
-- If utilizing a manually constructed Cheat Table, ensure the pointer chains are resolved properly.
-- (Optional) Store `.ct` files within CE’s working directory for rapid access.
+### **1.1 Core Concepts**  
+- **Memory Scanning:** Identification of volatile/non-volatile memory regions via **pattern matching, differential analysis, and pointer traversal**.  
+- **Cheat Tables:** Structured Lua-based scripts defining **memory offsets, pointer maps, assembly hooks, and conditional triggers**.  
+- **ASM Injection:** Direct **binary patching** of executable memory regions to alter game logic.  
+- **Dynamic Allocation Handling:** Techniques for **bypassing ASLR (Address Space Layout Randomization)** and **memory reallocation**.  
 
-### 2. Launch Cheat Engine
-- Execute `CheatEngine.exe` with elevated privileges (Administrator mode recommended for kernel-level access).
+---
 
-### 3. Initialize Target Process
-- Launch the game and allow all relevant memory regions to be allocated.
-- For deterministic manipulation, avoid state-changing events before scanning.
+## **2. Prerequisites & System Configuration**  
 
-### 4. Attach Cheat Engine to the Target Process
-- Use `ALT+TAB` to bring Cheat Engine into focus.
-- Click the **Process List** icon (depicted as a PC icon in CE’s UI).
-- Identify and select the active process for the target executable (e.g., `GameX.exe`).
-- Click **Open** to hook Cheat Engine’s debugger into the memory space.
+### **2.1 Required Tools**  
+| Tool | Purpose |  
+|------|---------|  
+| **Cheat Engine 7.5+** | Primary memory scanning & debugging environment |  
+| **x64dbg/x32dbg** | Advanced disassembly & breakpoint analysis |  
+| **Process Hacker 2** | Real-time memory inspection & handle analysis |  
+| **ReClass.NET** | Struct reconstruction & memory visualization |  
+| **IDR (Interactive Disassembler)** | Static binary analysis for cheat signature generation |  
 
-### 5. Load the Cheat Table
-#### If the Cheat Table is in Cheat Engine’s Working Directory:
-- CE automatically detects an associated `.ct` file and prompts for auto-load.
-- Click **YES** to proceed.
+### **2.2 Target Process Requirements**  
+- **Game/Process:** Must be running in **user-mode** (kernel-mode anti-cheat requires bypass).  
+- **Memory Permissions:** Ensure **PAGE_EXECUTE_READWRITE** access for ASM injection.  
+- **Version Matching:** `.ct` files must align with **game build hashes** to prevent misalignment.  
 
-#### If the Cheat Table Resides in an External Directory:
-- Press `CTRL + O` or navigate to `File` > `Load`.
-- Locate and select the `.ct` file.
-- Click **Open** to import the script.
+---
 
-### 6. Activate Scripts and Modify Memory Values
-- The Cheat Table will display a structured breakdown of scriptable modifications and memory regions.
-- **To enable a script:** Check the activation box next to the relevant cheat (e.g., `God Mode`).
-- **To modify direct memory values:**
-  - Locate the corresponding address (e.g., `Money: 5000`).
-  - Double-click the value field and manually override the stored value.
-  - If necessary, apply a freeze (`Lock`) to prevent value restoration via game logic.
+## **3. Workflow: Advanced Cheat Table Integration**  
 
-## Use Cases & Advanced Examples
+### **3.1 Process Initialization & Debugger Attachment**  
+1. **Launch Target Process** (`Game.exe`) with **Administrator Privileges** (bypasses UAC restrictions).  
+2. **Attach CE Debugger** via:  
+   - **Manual Selection:** `File > Open Process > [PID]`  
+   - **CLI Automation:** `cheatengine.exe --pid=[PID] --script=autoattach.lua`  
+3. **Bypass Anti-Debugging:**  
+   - Enable **Stealth Mode** (`Options > Settings > Debugger Options > Stealth Mode`)  
+   - Patch **`IsDebuggerPresent`** checks via **`kernel32.dll` hooking**.  
 
-### Example 1: Enabling God Mode via ASM Injection
-1. Attach Cheat Engine to the process.
-2. Load the Cheat Table.
-3. Locate the `God Mode - ASM Injection` script.
-4. Enable the script, triggering an `MOV EAX, 999` override within the health register.
-5. Resume gameplay and confirm the applied invulnerability.
+### **3.2 Cheat Table Loading & Validation**  
+1. **Load `.ct` File:**  
+   - **Auto-Load:** Place `.ct` in `%CE_DIR%\autorun` for automatic injection.  
+   - **Manual Load:** `CTRL+O` → Select table → **Verify checksum** (if signed).  
+2. **Pointer Map Verification:**  
+   - Run **Pointer Scanner** (`Memory Viewer > Tools > Pointer Scanner`) to validate offsets.  
+   - Use **Multi-Level Pointer Resolution** for dynamic memory.  
 
-### Example 2: Locating a Dynamic Address and Hooking It
-1. Perform an **Initial Scan** using `Exact Value` for a known in-game metric (e.g., `Health: 100`).
-2. Take damage to modify the memory state.
-3. Perform a **Next Scan** with the updated value.
-4. Iterate scanning until a singular memory address remains.
-5. Right-click the address and select **Add to Address List**.
-6. Modify the value manually or apply a pointer scan to locate the base pointer.
-7. (Advanced) Inject an inline `NOP` operation to suppress decrementing behavior.
+### **3.3 Script Activation & Memory Control**  
+- **Enable Scripts:** Checkbox activation triggers **Lua execution** or **ASM patches**.  
+- **Value Freezing:** Right-click → **Lock Address** to prevent game overwrites.  
+- **Conditional Scripting:** Use **`[ENABLE]`/`[DISABLE]`** blocks for runtime toggling.  
 
-### Example 3: Unlimited Ammo
-1. Identify the memory address that stores the ammo count.
-2. Fire a shot and scan for the updated value.
-3. Continue refining scans until you isolate the correct memory address.
-4. Lock the value or inject an ASM script to set it permanently high.
+---
 
-### Example 4: Speed Manipulation
-1. Find the memory variable associated with movement speed.
-2. Modify it to increase or decrease player velocity dynamically.
-3. Lock the value to maintain persistent effects.
+## **4. Advanced Use Cases: Technical Deep Dive**  
 
-### Example 5: Jump Height Adjustment
-1. Locate the jump height memory address.
-2. Modify the value to allow for higher jumps.
-3. Inject a script that applies a multiplier for dynamic height control.
+### **4.1 God Mode via ASM Injection**  
+**Objective:** Prevent health decrement by patching `SUB [health_reg], damage_val` → `NOP`.  
 
-### Example 6: No Recoil/Spread
-1. Identify the recoil control memory region.
-2. Apply a `NOP` operation to disable spread and recoil mechanics.
+1. **Locate Health Function:**  
+   - Scan for **`Player.Health`** → Find **`DEC [EAX+4C]`** in disassembly.  
+2. **Inject ASM:**  
+   ```asm  
+   [ENABLE]  
+   aobscanmodule(GodModeAOB,Game.exe,E8 ? ? ? ? 83 C4 04 89 45 FC)  
+   alloc(GodModeMem,1024)  
+   label(GodModeRet)  
+   GodModeMem:  
+     mov eax,[PlayerBase+4C]  // Load health  
+     mov [eax],#99999         // Overwrite  
+     jmp GodModeRet  
+   GodModeAOB:  
+     jmp GodModeMem  
+   GodModeRet:  
+   [DISABLE]  
+   ```  
+3. **Bypass CRC Checks:** Modify **`VirtualProtect`** flags to disable memory integrity scans.  
 
-### Example 7: Enemy AI Freezing
-1. Locate the memory value controlling enemy movement.
-2. Modify it to prevent AI from executing movement logic.
+---
 
-### Example 8: Unlimited Skill Points
-1. Scan for the current skill points value.
-2. Modify and lock it to prevent depletion.
+### **4.2 Unlimited Ammo via Code Cave**  
+**Objective:** Disable ammo consumption by intercepting `DEC [ammo_addr]`.  
 
-### Example 9: One-Hit Kills
-1. Locate the enemy health memory region.
-2. Modify the value to 1 or inject an ASM script to apply a massive damage multiplier.
+1. **Trace Ammo Decrement:**  
+   - Set **hardware breakpoint** on `ammo_addr` → Log call stack.  
+2. **Redirect Execution:**  
+   ```asm  
+   // In Cheat Engine's Memory Viewer:  
+   jmp CodeCave  
+   CodeCave:  
+     mov [edi+10],#999  // Force ammo to 999  
+     ret  
+   ```  
+3. **Handle Multiplayer Sync:** Disable **`NetSyncPacket`** validation if applicable.  
 
-### Example 10: Infinite Stamina
-1. Scan for the current stamina value.
-2. Modify and freeze it to prevent depletion.
+---
 
-### Example 11: Unlocking Paid DLC Content
-1. Identify flags corresponding to DLC activation.
-2. Modify them to enable locked features.
+### **4.3 Speed Hacking via Float Manipulation**  
+**Objective:** Modify `Player.Velocity` (stored as **IEEE 754 float**).  
 
-### Example 12: Map Clipping / No Collision
-1. Locate and modify the player collision flag.
-2. Set it to 0 or `NOP` collision checks.
+1. **Find Velocity:**  
+   - **Float Scan:** `Scan Type: Float` → Refine via movement changes.  
+2. **Apply Multiplier:**  
+   ```lua  
+   local speed = readFloat("PlayerBase+2A4")  
+   writeFloat("PlayerBase+2A4", speed * 2.0)  // 2x speed  
+   ```  
+3. **Anti-Anti-Cheat:** Obfuscate writes via **`WriteProcessMemory` hook**.  
 
-### Example 13: Time Manipulation
-1. Locate the in-game time variable.
-2. Modify it to freeze or accelerate time flow.
+---
 
-### Example 14: XP Multiplier
-1. Identify XP gain addresses.
-2. Modify the gain amount before it is applied.
+### **4.4 No Recoil via VMT Hooking**  
+**Objective:** Disable weapon recoil by **hooking `Weapon::ApplyRecoil`**.  
 
-### Example 15: Unlocking Developer Console
-1. Locate debug flag in memory.
-2. Modify the value to enable hidden debugging tools.
+1. **Locate VTable:**  
+   - Use **ReClass.NET** to find `Weapon` class → Extract **VTable pointer**.  
+2. **Detour Function:**  
+   ```cpp  
+   void __fastcall Hooked_ApplyRecoil(void* thisPtr, float intensity) {  
+     return;  // Skip original logic  
+   }  
+   ```  
+3. **Swap VTable Entry:**  
+   ```asm  
+   mov [WeaponVT+18],Hooked_ApplyRecoil  
+   ```  
 
-## Debugging & Troubleshooting
-- **Process Not Detectable:** Ensure the game is running with `Run as Administrator`. If the game employs anti-debugging mechanisms, use CE’s **Stealth Mode**.
-- **Cheat Table Not Functioning:** Validate the `.ct` file against the game version; address offsets often shift post-patch.
-- **Values Revert Instantly:** Some memory regions utilize dynamic allocation; use a pointer scan to locate the base address.
-- **Game Crashes on Modification:** Certain memory spaces employ integrity checks; consider debugging and identifying checksum routines.
+---
 
-## Security & Ethical Considerations
-- **Use Ethically:** Modifying single-player memory is generally acceptable, but altering networked values in multiplayer environments may trigger bans.
-- **Anti-Cheat Mechanisms:** Games with kernel-mode anti-cheats (e.g., Vanguard, EAC, BattleEye) may flag CE as a threat.
-- **Memory Integrity Checks:** Some modern titles use signature-based validation to detect modified instructions; apply script obfuscation or bypass mechanisms where applicable.
-- **Avoid Permanent Data Corruption:** Always maintain backups of save files prior to executing memory modifications.
+### **4.5 Unlocking DLC via Flag Flipping**  
+**Objective:** Activate locked content by modifying **`DLC_UnlockBitmask`**.  
 
-### Further Reading & Resources
-- [Cheat Engine Official Documentation](https://www.cheatengine.org/)
-- [Fearless Revolution - Cheat Table Repository](https://fearlessrevolution.com/)
-- [x64dbg – Advanced Debugging Alternative](https://x64dbg.com/)
-- [WinDbg – Windows Debugging Toolkit](https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/)
-- [ReClass.NET – Memory Structure Analysis](https://github.com/ReClassNET/ReClass.NET)
+1. **Find Bitmask:**  
+   - **Array of Bytes Scan** for `00 00 00 00` → Toggle DLC states.  
+2. **Patch License Check:**  
+   ```asm  
+   cmp [DLC_Check],0  
+   jne OriginalCode  
+   mov [DLC_Check],1  // Force unlock  
+   ```  
+
+---
+
+## **5. Anti-Cheat Evasion Strategies**  
+
+### **5.1 Signature Bypass Techniques**  
+- **Code Obfuscation:** Insert junk bytes (`90 90 EB 02`) before hooks.  
+- **Dynamic Recompilation:** Use **LLVM-based runtime recompilation** to mutate cheat signatures.  
+
+### **5.2 Kernel-Mode Protection**  
+- **Driver Unloading:** Disable **EAC/BattleEye** via `WinObjEx64` → `DriverObject` manipulation.  
+- **Hypervisor Bypass:** Execute CE in **VMware with nested virtualization**.  
+
+---
+
+## **6. Ethical & Legal Considerations**  
+- **Single-Player:** Generally permissible (check EULA).  
+- **Multiplayer:** Risk of **VAC bans, HWID blacklists, or legal action**.  
+- **DRM Circumvention:** Violates **DMCA §1201** in some jurisdictions.  
+
+---
+
+## **7. References & Further Study**  
+- **Books:**  
+  - *Game Hacking: Developing Autonomous Bots for Online Games* (Nick Cano)  
+  - *Practical Malware Analysis* (Michael Sikorski)  
+- **Tools:**  
+  - **Ghidra** (NSA Reverse Engineering Framework)  
+  - **Binary Ninja** (Commercial Disassembler)  
+- **Communities:**  
+  - **UnknownCheats.me**  
+  - **Reverse Engineering Stack Exchange**  
+
+---
 
