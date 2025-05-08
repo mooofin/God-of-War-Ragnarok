@@ -165,16 +165,10 @@ Cheat Engine (CE) is a **low-level memory analysis and manipulation framework** 
 
 ---
 
-## **7. References & Further Study**  
-- **Books:**  
-  - *Game Hacking: Developing Autonomous Bots for Online Games* (Nick Cano)  
-  - *Practical Malware Analysis* (Michael Sikorski)  
+ 
 - **Tools:**  
   - **Ghidra** (NSA Reverse Engineering Framework)  
   - **Binary Ninja** (Commercial Disassembler)  
-- **Communities:**  
-  - **UnknownCheats.me**  
-  - **Reverse Engineering Stack Exchange**  
 
----
+
 
